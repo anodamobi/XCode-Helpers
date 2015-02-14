@@ -14,9 +14,6 @@ import re
 import logging
 import sys
 
-# fixing pwd
-os.chdir(os.path.dirname(os.path.realpath(sys.argv[0])))
-
 
 parser = argparse.ArgumentParser(description='Generates project structure from template')
 parser.add_argument('--version', action='version', version='%(prog)s 1.0')
