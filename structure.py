@@ -43,12 +43,17 @@ if not os.path.isdir(args.templatePath):
     exit(1)
 
 
+args.prefixLower = args.prefix[0].lower() + args.prefix[1:]
+args.projectLower = args.project[0].lower() + args.project[1:]
+args.moduleLower = args.module[0].lower() + args.module[1:]
+
+
 def replace_placeholders(input):
-    output = re.sub('<%prefixLower%>', args.prefix.lower(), input)
+    output = re.sub('<%prefixLower%>', args.prefixLower, input)
     output = re.sub('<%prefix%>', args.prefix, output)
-    output = re.sub('<%projectLower%>', args.project.lower(), output)
+    output = re.sub('<%projectLower%>', args.projectLower, output)
     output = re.sub('<%project%>', args.project, output)
-    output = re.sub('<%moduleLower%>', args.module.lower(), output)
+    output = re.sub('<%moduleLower%>', args.moduleLower, output)
     output = re.sub('<%module%>', args.module, output)
     return output
 
@@ -58,14 +63,13 @@ for root, dirs, files in os.walk(args.templatePath):
     folder = replace_placeholders(root).replace(args.templatePath, '') + '/'
     if len(folder) > 1:
         print folder
-        os.makedirs(folder)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
     for filename in files:
         newFilename = folder + replace_placeholders(filename)
         print newFilename
         content = replace_placeholders(open('%s/%s' % (root, filename)).read())
         open(newFilename, 'wb').write(content)
-
-
 
 # EOF
